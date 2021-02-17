@@ -29,7 +29,7 @@ class ListNode {
 const listNodeToNums = (l: ListNode | null) => {
   const iter = (l: ListNode | null, nums: number[]) => {
     if (l != null) {
-      nums.unshift(l.val);
+      nums.push(l.val);
       return iter(l.next, nums);
     }
 
@@ -52,20 +52,21 @@ function addTwoNumbers(
   const l2Num = numsReverseToNum(l2Nums);
   const nums = String(l1Num + l2Num)
     .split("")
+    .reverse()
     .map(Number);
 
   // @ts-expect-error
-  return nums.reduce((acc, cur) => new ListNode(cur, acc), null);
+  return nums.reduceRight((acc, cur) => new ListNode(cur, acc), null);
 }
 
-const reduceArgs = [
+const reduceRightArgs = [
   (acc: ListNode | null, cur: number) => new ListNode(cur, acc),
   null,
 ];
 // @ts-expect-error
-const l1 = [2, 4, 3].reduce(...reduceArgs) as ListNode | null;
+const l1 = [2, 4, 3].reduceRight(...reduceRightArgs) as ListNode | null;
 // @ts-expect-error
-const l2 = [5, 6, 4].reduce(...reduceArgs) as ListNode | null;
+const l2 = [5, 6, 4].reduceRight(...reduceRightArgs) as ListNode | null;
 const output = addTwoNumbers(l1, l2);
 console.log(output);
 // @lc code=end
