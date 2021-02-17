@@ -26,36 +26,29 @@ class ListNode {
   }
 }
 
-const listNodeToNums = (l: ListNode | null) => {
-  const iter = (l: ListNode | null, nums: number[]) => {
-    if (l != null) {
-      nums.unshift(l.val);
-      return iter(l.next, nums);
-    }
-
-    return nums;
-  };
-
-  return iter(l, []);
-};
-
-const numsReverseToNum = (nums: number[]) =>
-  Number(nums.reverse().map(String).join(""));
-
 function addTwoNumbers(
   l1: ListNode | null,
   l2: ListNode | null
 ): ListNode | null {
-  const l1Nums = listNodeToNums(l1);
-  const l2Nums = listNodeToNums(l2);
-  const l1Num = numsReverseToNum(l1Nums);
-  const l2Num = numsReverseToNum(l2Nums);
-  const nums = String(l1Num + l2Num)
-    .split("")
-    .map(Number);
-
-  // @ts-expect-error
-  return nums.reduce((acc, cur) => new ListNode(cur, acc), null);
+  const dummyHead = new ListNode(0);
+  let p = l1,
+    q = l2,
+    curr = dummyHead,
+    carry = 0;
+  while (p != null || q != null) {
+    const x = p?.val ?? 0,
+      y = q?.val ?? 0;
+    const sum = x + y + carry;
+    carry = Math.floor(sum / 10);
+    curr.next = new ListNode(sum % 10);
+    curr = curr.next;
+    if (p != null) p = p.next;
+    if (q != null) q = q.next;
+  }
+  if (carry > 0) {
+    curr.next = new ListNode(carry);
+  }
+  return dummyHead.next;
 }
 
 const reduceArgs = [
