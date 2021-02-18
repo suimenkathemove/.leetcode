@@ -56,9 +56,9 @@ const reduceArgs = [
   null,
 ];
 // @ts-expect-error
-const l1 = [2, 4, 3].reduce(...reduceArgs) as ListNode | null;
+const l1 = [2, 4, 3].reduceRight(...reduceArgs) as ListNode | null;
 // @ts-expect-error
-const l2 = [5, 6, 4].reduce(...reduceArgs) as ListNode | null;
+const l2 = [5, 6, 4].reduceRight(...reduceArgs) as ListNode | null;
 const output = addTwoNumbers(l1, l2);
 console.log(output);
 // @lc code=end
