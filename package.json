@@ -1,0 +1,8 @@
+{
+  "name": "leetcode",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "devDependencies": {
+    "typescript": "^4.1.5"
+  }
+}
