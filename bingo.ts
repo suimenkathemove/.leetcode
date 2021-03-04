@@ -28,9 +28,7 @@ const checkIsBingo = (bingo: Bingo, ...nums: number[]): boolean => {
     ...acc,
     ...cur,
   ]);
-  const filteredNums = Array.from(new Set(nums)).filter((num) =>
-    bingoNums.includes(num)
-  );
+  const filteredNums = nums.filter((num) => bingoNums.includes(num));
   const numXys: Xys = (() => {
     const numXys: Xys = [];
     filteredNums.forEach((num) => {
