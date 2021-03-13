@@ -3,20 +3,19 @@
 // const input = fs.readFileSync("/dev/stdin", "utf8");
 // const N = Number(input);
 
-const func = (n: number) => {
+const createDoublet = (x: number, n: number) => {
   let carry = 0;
   for (let i = 0; i < n; i++) {
     carry = carry * 10 + 1;
   }
-  return carry;
+  return x * carry;
 };
 
 const main = (N: number): void => {
-  const a = N % 9 || 9;
-  const b = Math.trunc(N / 9);
-  const c = a !== 9 ? b + 1 : b;
+  const x = N % 9 || 9;
+  const n = Math.ceil(N / 9);
 
-  console.log(func(c) * a);
+  console.log(createDoublet(x, n));
 };
 
 for (let N = 1; N <= 50; N++) {
