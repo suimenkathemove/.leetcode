@@ -48,7 +48,7 @@ if (
   rows.some((r) => columns.every((c) => M[r][c])) ||
   columns.some((c) => rows.every((r) => M[r][c])) ||
   rows.every((r) => columns.every((c) => r !== c || M[r][c])) ||
-  rows.every((r) => columns.every((c) => r + c !== 3 - 1 || M[r][c]))
+  rows.every((r) => columns.every((c) => r + c !== LENGTH - 1 || M[r][c]))
 ) {
   console.log("Yes");
 } else {
