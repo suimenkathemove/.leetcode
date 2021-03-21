@@ -1,12 +1,14 @@
 import * as fs from "fs";
 
-const [A, R, N] = fs.readFileSync("/dev/stdin", "utf8").split(" ").map(Number);
+const input = fs.readFileSync("/dev/stdin", "utf8");
 
-// const A = 2;
-// const R = 3;
-// const N = 4;
+const [A, R, N] = input.split(" ").map(Number);
 
 const solve = (A: number, R: number, N: number): number | "large" => {
+  if (R === 1) {
+    return A;
+  }
+
   for (let i = 0; i < N - 1; i++) {
     A *= R;
 
