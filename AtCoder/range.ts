@@ -1,7 +1,16 @@
-function* range(...args: [number, number] | [number]) {
-  const [start, end] = args.length === 2 ? args : [0, ...args];
+function range(
+  ...args: [end: number] | [start: number, end: number, step?: number]
+) {
+  const arr = [];
 
-  for (let i = start; i < end; i++) {
-    yield i;
+  const [start = 0, end, step = 1] =
+    args.length === 1 ? [void 0, ...args] : args;
+
+  let i = start;
+  while (step > 0 ? i < end : i > end) {
+    arr.push(i);
+    i += step;
   }
+
+  return arr;
 }
