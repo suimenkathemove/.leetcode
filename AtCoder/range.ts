@@ -14,3 +14,11 @@ function range(
 
   return arr;
 }
+
+function* range(...args: [start: number] | [start: number, end: number]) {
+  const [start, end] = args.length === 1 ? [0, ...args] : args;
+
+  for (let i = start; i < end; i++) {
+    yield i;
+  }
+}
