@@ -1,12 +1,17 @@
 class Heap {
-  constructor(public data: number[]) {}
+  constructor(private _data: number[]) {}
+
+  get data() {
+    const data: Readonly<Heap["_data"]> = this._data;
+    return data;
+  }
 
   push(item: number) {
-    this.data.push(item);
+    this._data.push(item);
   }
 
   pop() {
-    return this.data.sort().shift();
+    return this._data.sort().shift();
   }
 }
 
