@@ -1,6 +1,6 @@
-function range(
+const range = (
   ...args: [end: number] | [start: number, end: number, step?: number]
-) {
+) => {
   const arr = [];
 
   const [start = 0, end, step = 1] =
@@ -13,7 +13,7 @@ function range(
   }
 
   return arr;
-}
+};
 
 function* range(...args: [start: number] | [start: number, end: number]) {
   const [start, end] = args.length === 1 ? [0, ...args] : args;
