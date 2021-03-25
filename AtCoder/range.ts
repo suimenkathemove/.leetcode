@@ -1,7 +1,7 @@
 const range = (
   ...args: [end: number] | [start: number, end: number, step?: number]
-) => {
-  const arr = [];
+): number[] => {
+  const arr: number[] = [];
 
   const [start = 0, end, step = 1] =
     args.length === 1 ? [void 0, ...args] : args;
