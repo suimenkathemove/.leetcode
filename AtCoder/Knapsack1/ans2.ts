@@ -42,7 +42,7 @@ const main = () => {
   value[0][0];
 
   range(1, N + 1).forEach((i) => {
-    range(W + 1).forEach((w) => {
+    range(1, W + 1).forEach((w) => {
       value[i][w] = Math.max(value[i][w], value[i - 1][w]);
 
       if (w >= ws[i]) {
