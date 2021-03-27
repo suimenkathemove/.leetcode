@@ -3,8 +3,12 @@ const range = (
 ): number[] => {
   const arr: number[] = [];
 
-  const [start = 0, end, step = 1] =
-    args.length === 1 ? [void 0, ...args] : args;
+  // @ts-expect-error
+  const [start = 0, end, step = start < end ? 1 : -1]: [
+    number,
+    number,
+    number
+  ] = args.length === 1 ? [void 0, ...args] : args;
 
   let i = start;
   while (step > 0 ? i < end : i > end) {
@@ -14,11 +18,3 @@ const range = (
 
   return arr;
 };
-
-function* range(...args: [start: number] | [start: number, end: number]) {
-  const [start, end] = args.length === 1 ? [0, ...args] : args;
-
-  for (let i = start; i < end; i++) {
-    yield i;
-  }
-}
