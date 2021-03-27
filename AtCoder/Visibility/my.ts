@@ -3,8 +3,12 @@ const range = (
 ): number[] => {
   const arr: number[] = [];
 
-  const [start = 0, end, step = start < end ? 1 : -1] =
-    args.length === 1 ? [void 0, ...args] : args;
+  // @ts-expect-error
+  const [start = 0, end, step = start < end ? 1 : -1]: [
+    number,
+    number,
+    number
+  ] = args.length === 1 ? [void 0, ...args] : args;
 
   let i = start;
   while (step > 0 ? i < end : i > end) {
@@ -15,17 +19,7 @@ const range = (
   return arr;
 };
 
-import * as fs from "fs";
-
-const input = fs.readFileSync("/dev/stdin", "utf8");
-// const input = `5 5 4 2
-// .#..#
-// #.###
-// ##...
-// #..#.
-// #.###`;
-
-const main = () => {
+const main = (input: string) => {
   const splitInput = input.split("\n");
 
   const [H, W, X, Y] = splitInput[0].split(" ").map((str) => Number(str) - 1);
@@ -72,4 +66,4 @@ const main = () => {
   console.log(count);
 };
 
-export const ans = main();
+main(require("fs").readFileSync("/dev/stdin", "utf8"));
