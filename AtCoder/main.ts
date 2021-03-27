@@ -1,8 +1,4 @@
-// import * as fs from "fs";
+const main = (input: string): void => {};
 
-// const input = fs.readFileSync("/dev/stdin", "utf8");
-const input = ``;
-
-const main = () => {};
-
-export const ans = main();
+export const mainReturn = main(``);
+// main(require("fs").readFileSync("/dev/stdin", "utf8"));
