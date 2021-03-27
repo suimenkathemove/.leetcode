@@ -58,7 +58,7 @@ const main = () => {
     if (i >= 0) {
       ans = Math.min(
         ans,
-        cost[i] + Math.trunc(T1 / 2) + Math.trunc((T2 * (2 * (L - i) - 1)) / 2)
+        cost[i] + Math.trunc(0.5 * T1) + Math.trunc((L - i - 0.5) * T2)
       );
     }
   });
