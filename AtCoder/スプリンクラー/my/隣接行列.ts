@@ -22,7 +22,7 @@ const range = (
 const main = (splitInput: string[]): void => {
   const [N, M, Q] = splitInput[0].split(" ").map(Number);
 
-  const G = range(N).map(() => range(N).map(() => false));
+  const G: boolean[][] = range(N).map(() => range(N).map(() => false));
   const gStartIndex = 1;
   const gEndIndex = gStartIndex + (M - 1);
   splitInput.slice(gStartIndex, gEndIndex + 1).forEach((str) => {
