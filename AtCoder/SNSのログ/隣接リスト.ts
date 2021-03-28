@@ -47,10 +47,6 @@ const main = (splitInput: string[]): void => {
           a--;
 
           following.forEach((row, x) => {
-            if (x === a) {
-              return;
-            }
-
             // @ts-ignore
             if ([...row].includes(a)) {
               following[a].add(x);

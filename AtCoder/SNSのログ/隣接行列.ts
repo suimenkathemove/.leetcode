@@ -45,12 +45,8 @@ const main = (splitInput: string[]): void => {
 
           a--;
 
-          following.forEach((followingRow, x) => {
-            if (x === a) {
-              return;
-            }
-
-            if (followingRow[a]) {
+          range(N).forEach((x) => {
+            if (following[x][a]) {
               following[a][x] = true;
             }
           });
@@ -63,18 +59,10 @@ const main = (splitInput: string[]): void => {
           a--;
 
           const tmp: number[] = [];
-          following[a].forEach((isFollowing, x) => {
-            if (x === a) {
-              return;
-            }
-
-            if (isFollowing) {
-              following[x].forEach((isFollowing2, y) => {
-                if (y === a) {
-                  return;
-                }
-
-                if (isFollowing2) {
+          range(N).forEach((x) => {
+            if (following[a][x]) {
+              range(N).forEach((y) => {
+                if (following[x][y] && y !== a) {
                   tmp.push(y);
                 }
               });
@@ -88,9 +76,9 @@ const main = (splitInput: string[]): void => {
     }
   });
 
-  following.forEach((followingRow) => {
+  range(N).forEach((i) => {
     console.log(
-      followingRow.map((isFollowing) => (isFollowing ? "Y" : "N")).join("")
+      following[i].map((isFollowing) => (isFollowing ? "Y" : "N")).join("")
     );
   });
 };
