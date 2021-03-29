@@ -1,4 +1,4 @@
-const main = (splitInput: string[]): void => {};
+const main = (lines: string[]): void => {};
 
 const input = ``;
 export const mainReturn = main(input.split("\n"));
