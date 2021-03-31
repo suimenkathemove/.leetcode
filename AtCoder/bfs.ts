@@ -22,6 +22,7 @@ const range = (
 class Queue<T> {
   constructor(private _data: T[]) {}
 
+  // @ts-ignore
   get data(): Readonly<T[]> {
     return this._data;
   }
