@@ -66,7 +66,7 @@ while (queue.data.length > 0) {
   const i = queue.pop()!;
 
   G[i].forEach((j) => {
-    if (!G[j]) {
+    if (!visited[j]) {
       visited[j] = true;
       queue.push(j);
     }
