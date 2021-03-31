@@ -51,8 +51,16 @@ const main = (lines: string[]): void => {
 
   dist[0] = 0;
 
+  const done: boolean[] = range(N).map(() => false);
+
   while (heap.data.length > 0) {
     const [d, i] = heap.pop()!;
+
+    if (done[i]) {
+      continue;
+    }
+
+    done[i] = true;
 
     graph[i].forEach((j) => {
       const x = 1;
