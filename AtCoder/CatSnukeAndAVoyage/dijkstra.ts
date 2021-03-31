@@ -1,10 +1,24 @@
-function* range(...args: [start: number] | [start: number, end: number]) {
-  const [start, end] = args.length === 1 ? [0, ...args] : args;
+// RE
+const range = (
+  ...args: [end: number] | [start: number, end: number, step?: number]
+): number[] => {
+  const arr: number[] = [];
 
-  for (let i = start; i < end; i++) {
-    yield i;
+  // @ts-expect-error
+  const [start = 0, end, step = start < end ? 1 : -1]: [
+    number,
+    number,
+    number
+  ] = args.length === 1 ? [void 0, ...args] : args;
+
+  let i = start;
+  while (step > 0 ? i < end : i > end) {
+    arr.push(i);
+    i += step;
   }
-}
+
+  return arr;
+};
 
 class Heap {
   constructor(public data: [number, number][]) {}
@@ -18,47 +32,43 @@ class Heap {
   }
 }
 
-const input = `3 2
-1 2
-2 3`;
+const main = (lines: string[]): void => {
+  const [N, M] = lines[0].split(" ").map(Number);
 
-const splitInput = input.split("\n");
+  const graph: number[][] = range(N).map(() => []);
+  lines.slice(1).forEach((str) => {
+    const [a, b] = str.split(" ").map((s) => Number(s) - 1);
 
-const [N] = splitInput[0].split(" ").map(Number);
-
-const G: number[][] = (() => {
-  const arr: number[][] = [...range(N)].map(() => []);
-
-  splitInput.slice(1).forEach((s) => {
-    let [ai, bi] = s.split(" ").map(Number);
-
-    ai -= 1;
-    bi -= 1;
-
-    arr[ai].push(bi);
-    arr[bi].push(ai);
+    graph[a].push(b);
+    graph[b].push(a);
   });
 
-  return arr;
-})();
+  const dist: number[] = range(N).map(() => -1);
 
-const dist = [...range(N)].map(() => -1);
+  const heap = new Heap([]);
 
-const heap = new Heap([[0, 0]]);
+  heap.push([0, 0]);
 
-dist[0] = 0;
+  dist[0] = 0;
 
-while (heap.data.length > 0) {
-  const [_, i] = heap.pop();
+  while (heap.data.length > 0) {
+    const [d, i] = heap.pop()!;
 
-  G[i].forEach((j) => {
-    const x = 1;
+    graph[i].forEach((j) => {
+      const x = 1;
 
-    if (dist[j] === -1 || dist[j] > dist[i] + x) {
-      dist[j] = dist[i] + x;
-      heap.push([dist[j], j]);
-    }
-  });
-}
+      if (dist[j] === -1 || dist[i] + x < dist[j]) {
+        dist[j] = dist[i] + x;
+        heap.push([dist[j], j]);
+      }
+    });
+  }
 
-console.log(dist[N - 1] === 2 ? "POSSIBLE" : "IMPOSSIBLE");
+  console.log(dist[N - 1] == 2 ? "POSSIBLE" : "IMPOSSIBLE");
+};
+
+// const input = `3 2
+// 1 2
+// 2 3`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
