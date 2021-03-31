@@ -1,12 +1,11 @@
-class Heap {
-  constructor(private _data: number[]) {}
+class Heap<T> {
+  constructor(private _data: T[]) {}
 
-  get data() {
-    const data: Readonly<Heap["_data"]> = this._data;
-    return data;
+  get data(): Readonly<T[]> {
+    return this._data;
   }
 
-  push(item: number) {
+  push(item: T) {
     this._data.push(item);
   }
 
