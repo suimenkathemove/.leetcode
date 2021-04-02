@@ -1,28 +1,28 @@
-function* range(start: number, end: number) {
-  for (let i = start; i < end; i++) {
-    yield i;
+const main = (lines: string[]): void => {
+  const [N, K] = lines[0].split(" ").map(Number);
+  const A = lines[1].split(" ").map(Number);
+
+  let ok = N;
+  let ng = -1;
+
+  while (Math.abs(ok - ng) > 1) {
+    const middle = Math.floor((ok + ng) / 2);
+
+    if (A[middle] >= K) {
+      ok = middle;
+    } else {
+      ng = middle;
+    }
   }
-}
 
-const N = 8;
-const K = 4;
-const As = [...range(0, 8)].map((_, i) => 2 * i + 1);
-
-let okIndex = N;
-let ngIndex = -1;
-
-while (okIndex - ngIndex > 1) {
-  const middleIndex = Math.trunc((okIndex + ngIndex) / 2);
-
-  if (As[middleIndex] >= K) {
-    okIndex = middleIndex;
+  if (ok === N) {
+    console.log(-1);
   } else {
-    ngIndex = middleIndex;
+    console.log(ok);
   }
-}
+};
 
-if (okIndex === N) {
-  console.log(-1);
-} else {
-  console.log(okIndex);
-}
+// const input = `8 4
+// 1 3 5 7 9 11 13 15`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
