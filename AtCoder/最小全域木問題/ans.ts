@@ -1,3 +1,5 @@
+// TLE
+
 const range = (
   func: (i: number, index: number) => void,
   ...args: [end: number] | [start: number, end: number, step?: number]
@@ -17,6 +19,7 @@ const range = (
     index++;
   }
 };
+
 class Heap<T extends [number, number]> {
   constructor(private _data: T[]) {}
 
@@ -35,18 +38,19 @@ class Heap<T extends [number, number]> {
 }
 
 const main = (lines: string[]): void => {
-  const N = Number(lines[0]);
+  const [N, M] = lines[0].split(" ").map(Number);
 
   const graph: [v: number, c: number][][] = [];
   range((i) => {
     graph[i] = [];
   }, N);
-  lines.slice(1).forEach((str) => {
-    const [u, v, c] = str.split(" ").map(Number);
+  const uvcs = lines.slice(1);
+  range((i) => {
+    const [u, v, c] = uvcs[i].split(" ").map(Number);
 
     graph[u].push([v, c]);
     graph[v].push([u, c]);
-  });
+  }, M);
 
   const marked: boolean[] = [];
   range((i) => {
@@ -57,8 +61,8 @@ const main = (lines: string[]): void => {
 
   const heap = new Heap<[number, number]>([]);
 
-  graph[0].forEach(([i, c]) => {
-    heap.push([c, i]);
+  graph[0].forEach(([j, c]) => {
+    heap.push([c, j]);
   });
   marked[0] = true;
   markedCount++;
@@ -89,12 +93,13 @@ const main = (lines: string[]): void => {
   console.log(sum);
 };
 
-const input = `5
-0 1 10
-0 4 30
-1 2 10
-1 4 20
-2 3 30
-2 4 20
-3 4 10`;
-export const mainReturn = main(input.split("\n"));
+// const input = `5 7
+// 0 1 10
+// 0 4 30
+// 1 2 10
+// 1 4 20
+// 2 3 30
+// 4 2 20
+// 4 3 10`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
