@@ -24,13 +24,7 @@ const A = [2, 5, 1];
 const sum = [0];
 
 range(A.length).forEach((i) => {
-  let s = 0;
-
-  range(i + 1).forEach((j) => {
-    s += A[j];
-  });
-
-  sum.push(s);
+  sum.push(sum[i] + A[i]);
 });
 
 console.log(sum);
