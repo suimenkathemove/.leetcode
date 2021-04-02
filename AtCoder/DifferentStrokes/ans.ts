@@ -1,32 +1,32 @@
-// WA
-
 const main = (lines: string[]): void => {
-  const arr = lines
-    .slice(1)
-    .map((str) => str.split(" ").map(Number))
-    .sort(
-      (a, b) =>
-        b.reduce((acc, cur) => acc + cur) - a.reduce((acc, cur) => acc + cur)
-    );
+  const N = Number(lines[0]);
+
+  const arr: [number, number, number][] = [];
+  for (let i = 0; i < N; i++) {
+    const [a, b] = lines.slice(1)[i].split(" ").map(Number);
+    arr.push([-a - b, a, b]);
+  }
+
+  arr.sort(([c1], [c2]) => c1 - c2);
 
   let ans = 0;
 
-  arr.forEach((item, index) => {
-    const [a, b] = item;
+  for (let i = 0; i < N; i++) {
+    const [c, a, b] = arr[i];
 
-    if (index % 2 === 0) {
+    if (i % 2 === 0) {
       ans += a;
     } else {
       ans -= b;
     }
-  });
+  }
 
   console.log(ans);
 };
 
-const input = `3
-10 10
-20 20
-30 30`;
-export const mainReturn = main(input.split("\n"));
-// main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
+// const input = `3
+// 10 10
+// 20 20
+// 30 30`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
