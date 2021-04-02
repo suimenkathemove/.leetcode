@@ -1,55 +1,55 @@
-function range(
+// TLE
+
+function* range(
   ...args: [end: number] | [start: number, end: number, step?: number]
 ) {
-  const arr = [];
+  // @ts-expect-error
+  const [start = 0, end, step = start < end ? 1 : -1]: [
+    number,
+    number,
+    number
+  ] = args.length === 1 ? [void 0, ...args] : args;
 
-  const [start = 0, end, step = 1] =
-    args.length === 1 ? [void 0, ...args] : args;
-
-  let i = start;
-  while (step > 0 ? i < end : i > end) {
-    arr.push(i);
-    i += step;
+  for (let i = start; step > 0 ? i < end : i > end; i += step) {
+    yield i;
   }
-
-  return arr;
 }
 
-// import * as fs from "fs";
+const main = (lines: string[]): void => {
+  const N = Number(lines[0]);
 
-// const input = fs.readFileSync("/dev/stdin", "utf8");
-const input = `3
-1 3
-2 2
-2 4`;
-
-const splitInput = input.split("\n");
-
-const N = Number(splitInput[0]);
-
-const X: number[][] = range(N).map(() => []);
-
-splitInput.slice(1).forEach((s) => {
-  const [a, b] = s.split(" ").map(Number);
-  X[a - 1].push(b);
-});
-
-const cnt: number[] = range(101).map(() => 0);
-
-let ans = 0;
-
-range(N).forEach((d) => {
-  X[d].forEach((b) => {
-    cnt[b] += 1;
+  const X: number[][] = [...range(N)].map(() => []);
+  [...range(N)].forEach((i) => {
+    const [a, b] = lines.slice(1)[i].split(" ").map(Number);
+    X[a - 1].push(b);
   });
 
-  for (const b of range(100, 0, -1)) {
-    if (cnt[b] > 0) {
-      ans += b;
-      cnt[b] -= 1;
-      break;
-    }
-  }
+  const count = [...range(101)].map(() => 0);
 
-  console.log(ans);
-});
+  let ans = 0;
+
+  [...range(N)].forEach((d) => {
+    X[d].forEach((b) => {
+      count[b] += 1;
+    });
+
+    for (const b of range(100, 0)) {
+      if (count[b] > 0) {
+        ans += b;
+
+        count[b] -= 1;
+
+        break;
+      }
+    }
+
+    console.log(ans);
+  });
+};
+
+// const input = `3
+// 1 3
+// 2 2
+// 2 4`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
