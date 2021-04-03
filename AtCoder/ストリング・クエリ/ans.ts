@@ -1,58 +1,100 @@
-function* range(start: number, end: number) {
-  for (let i = start; i < end; i++) {
+// TLE
+
+function* range(
+  ...args: [end: number] | [start: number, end: number, step?: number]
+) {
+  // @ts-expect-error
+  const [start = 0, end, step = start < end ? 1 : -1]: [
+    number,
+    number,
+    number
+  ] = args.length === 1 ? [void 0, ...args] : args;
+
+  for (let i = start; step > 0 ? i < end : i > end; i += step) {
     yield i;
   }
 }
 
-const alphabets = [...range(0, 26)].map((_, i) =>
-  String.fromCharCode("a".charCodeAt(0) + i)
-);
+const alphabets = (() => {
+  const arr: string[] = [];
+  for (const i of range(26)) {
+    arr.push(String.fromCharCode("a".charCodeAt(0) + i));
+  }
+  return arr;
+})();
 
-const input = `6
-1 a 5
-2 3
-1 t 8
-1 c 10
-2 21
-2 4`;
+class Queue<T> {
+  constructor(private _data: T[]) {}
 
-const Q = input.split(`\n`);
-const que: [string, number][] = [];
-
-Q.forEach((q, i) => {
-  if (i === 0) {
-    return;
+  // @ts-ignore
+  get data(): Readonly<T[]> {
+    return this._data;
   }
 
-  const values = q.split(" ");
+  push(item: T) {
+    this._data.push(item);
+  }
 
-  if (Number(values[0]) === 1) {
-    const c = values[1];
-    const x = Number(values[2]);
-    que.push([c, x]);
-  } else {
-    let d = Number(values[1]);
-    const cnt: Record<string, number> = alphabets.reduce(
-      (acc, cur) => ({
-        ...acc,
-        [cur]: 0,
-      }),
-      {}
-    );
-    while (d > 0 && que.length > 0) {
-      const [c, x] = que[0];
-      if (d >= x) {
-        d -= x;
-        cnt[c] += x;
-        que.shift();
-      } else {
-        cnt[c] += d;
-        que[0][1] -= d;
-        d = 0;
-      }
+  pop() {
+    return this._data.shift();
+  }
+}
+
+const main = (lines: string[]): void => {
+  const Q = Number(lines[0]);
+
+  const queue = new Queue<[string, number]>([]);
+
+  const Querys = lines.slice(1);
+
+  for (const q of range(Q)) {
+    const values = Querys[q].split(" ");
+
+    switch (values[0] as "1" | "2") {
+      case "1":
+        const c = values[1];
+        const x = Number(values[2]);
+
+        queue.push([c, x]);
+
+        break;
+      case "2":
+        let d = Number(values[1]);
+
+        const count: Record<string, number> = {};
+        for (const c of alphabets) {
+          count[c] = 0;
+        }
+
+        while (d > 0 && queue.data.length > 0) {
+          const [c, x] = queue.data[0];
+
+          if (d >= x) {
+            d -= x;
+            count[c] += x;
+            queue.pop();
+          } else {
+            count[c] += d;
+            queue.data[0][1] -= d;
+            d = 0;
+          }
+        }
+
+        const ans = alphabets.reduce((acc, cur) => acc + count[cur] ** 2, 0);
+
+        console.log(ans);
+
+        break;
     }
-
-    const ans = alphabets.reduce((acc, cur) => acc + cnt[cur] ** 2, 0);
-    console.log(ans);
   }
-});
+};
+
+// const input = `6
+// 1 a 5
+// 2 3
+// 1 t 8
+// 1 c 10
+// 2 21
+// 2 4`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
