@@ -1,80 +1,68 @@
-type BingoRow = [number, number, number];
+function* range(
+  ...args: [end: number] | [start: number, end: number, step?: number]
+) {
+  // @ts-expect-error
+  const [start = 0, end, step = start < end ? 1 : -1]: [
+    number,
+    number,
+    number
+  ] = args.length === 1 ? [void 0, ...args] : args;
 
-type Bingo = [BingoRow, BingoRow, BingoRow];
+  for (let i = start; step > 0 ? i < end : i > end; i += step) {
+    yield i;
+  }
+}
 
-const bingo: Bingo = [
-  [1, 2, 3],
-  [4, 5, 6],
-  [7, 8, 9],
-];
+const main = (lines: string[]): void => {
+  const A = lines.splice(0, 3).map((str) => str.split(" ").map(Number));
+  const N = Number(lines.splice(0, 1));
+  const bLines = lines.splice(0, N);
 
-type XyValue = 0 | 1 | 2;
+  const ijMap: Record<number, [number, number]> = {};
+  for (const i of range(3)) {
+    for (const j of range(3)) {
+      ijMap[A[i][j]] = [i, j];
+    }
+  }
 
-type Xys = [XyValue, XyValue][];
-
-const bingoXys: Xys = (() => {
-  const array = [0, 1, 2] as const;
-  const bingoXys: Xys = [];
-  array.forEach((i) => {
-    array.forEach((j) => {
-      bingoXys.push([i, j]);
-    });
-  });
-  return bingoXys;
-})();
-
-const checkIsBingo = (bingo: Bingo, ...nums: number[]): boolean => {
-  const bingoNums: number[] = (bingo as number[][]).reduce((acc, cur) => [
-    ...acc,
-    ...cur,
-  ]);
-  const filteredNums = nums.filter((num) => bingoNums.includes(num));
-  const numXys: Xys = (() => {
-    const numXys: Xys = [];
-    filteredNums.forEach((num) => {
-      bingo.forEach((_, x) => {
-        bingo[x].forEach((_, y) => {
-          if (num === bingo[x][y]) {
-            numXys.push([x as XyValue, y as XyValue]);
-          }
-        });
-      });
-    });
-    return numXys;
-  })();
-
-  const checkExistsNumXysInBingoXys = (bingoXys: Xys): boolean =>
-    bingoXys.every(([bingoX, bingoY]) =>
-      numXys.some(([numX, numY]) => bingoX === numX && bingoY === numY)
-    );
-
-  return (
-    [0, 1, 2].some((i) =>
-      checkExistsNumXysInBingoXys([
-        bingoXys[3 * i],
-        bingoXys[3 * i + 1],
-        bingoXys[3 * i + 2],
-      ])
-    ) ||
-    [0, 1, 2].some((i) =>
-      checkExistsNumXysInBingoXys([
-        bingoXys[i],
-        bingoXys[i + 3],
-        bingoXys[i + 6],
-      ])
-    ) ||
-    checkExistsNumXysInBingoXys([bingoXys[0], bingoXys[4], bingoXys[8]]) ||
-    checkExistsNumXysInBingoXys([bingoXys[2], bingoXys[4], bingoXys[6]])
+  const bingo: boolean[][] = [...range(3)].map(() =>
+    [...range(3)].map(() => false)
   );
+
+  for (const n of range(N)) {
+    const b = Number(bLines[n]);
+
+    if (ijMap[b] == null) {
+      continue;
+    }
+
+    const [i, j] = ijMap[b];
+
+    bingo[i][j] = true;
+  }
+
+  const isBingo =
+    [...range(3)].some(
+      (n) =>
+        [...range(3)].every((m) => bingo[n][m]) ||
+        [...range(3)].every((m) => bingo[m][n])
+    ) ||
+    (bingo[0][0] && bingo[1][1] && bingo[2][2]) ||
+    (bingo[0][2] && bingo[1][1] && bingo[2][0]);
+
+  console.log(isBingo ? "Yes" : "No");
 };
 
-console.log(
-  checkIsBingo(bingo, 1, 2, 3),
-  checkIsBingo(bingo, 4, 5, 6),
-  checkIsBingo(bingo, 7, 8, 9),
-  checkIsBingo(bingo, 1, 4, 7),
-  checkIsBingo(bingo, 2, 5, 8),
-  checkIsBingo(bingo, 3, 6, 9),
-  checkIsBingo(bingo, 1, 5, 9),
-  checkIsBingo(bingo, 3, 5, 7)
-);
+// const input = `84 97 66
+// 79 89 11
+// 61 59 7
+// 7
+// 89
+// 7
+// 87
+// 79
+// 24
+// 84
+// 30`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
