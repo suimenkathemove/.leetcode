@@ -16,11 +16,7 @@ function* range(
 const main = (lines: string[]): void => {
   const S = lines[0];
 
-  const arr = S.match(/[A-Z].*?[A-Z]/g);
-
-  if (arr == null) {
-    throw new Error();
-  }
+  const arr = S.match(/[A-Z].*?[A-Z]/g)!;
 
   arr.sort((a, b) => {
     const A = a.toUpperCase();
