@@ -1,5 +1,3 @@
-// RE
-
 function* range(
   ...args: [end: number] | [start: number, end: number, step?: number]
 ) {
@@ -74,13 +72,17 @@ function getSeparatingIndexesList(n: number) {
   return arr;
 }
 
-const separate = <T>(arr: T[], separatingIndexes: number[]): T[][] => {
+const separate = <T extends any>(
+  arr: T[],
+  separatingIndexes: number[]
+): T[][] => {
   const separatedArr: T[][] = [];
 
   separatedArr.push(arr.slice(0, separatingIndexes[0] + 1));
 
   separatingIndexes.forEach((v, i, a) => {
-    separatedArr.push(arr.slice(v + 1, (a[i + 1] ?? arr.length - 1) + 1));
+    const endIndex = a[i + 1] != null ? a[i + 1] : arr.length - 1;
+    separatedArr.push(arr.slice(v + 1, endIndex + 1));
   });
 
   return separatedArr;
@@ -89,6 +91,12 @@ const separate = <T>(arr: T[], separatingIndexes: number[]): T[][] => {
 const main = (lines: string[]): void => {
   const N = Number(lines.splice(0, 1));
   const A = lines[0].split(" ").map(Number);
+
+  if (A.length === 1) {
+    console.log(A[0]);
+
+    return;
+  }
 
   const separatingIndexesList = getSeparatingIndexesList(N - 1);
 
@@ -106,7 +114,7 @@ const main = (lines: string[]): void => {
   console.log(ans);
 };
 
-const input = `3
-1 5 7`;
-export const mainReturn = main(input.split("\n"));
-// main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
+// const input = `1
+// 1073741823`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
