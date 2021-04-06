@@ -13,7 +13,7 @@ function* range(
   }
 }
 
-const main = (lines: string[]): void => {};
+const main = (inputRows: string[]): void => {};
 
 const input = ``;
 export const mainReturn = main(input.split("\n"));
