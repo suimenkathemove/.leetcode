@@ -20,7 +20,7 @@ const range = (
 };
 
 class Queue<T> {
-  constructor(private _data: T[]) {}
+  private _data: T[] = [];
 
   // @ts-ignore
   get data(): Readonly<T[]> {
@@ -44,7 +44,7 @@ const main = (splitInput: string[]): void => {
     .slice(3)
     .map((str) => str.split("").map((v) => (v !== "#" ? -1 : v)));
 
-  const Q = new Queue<[number, number]>([]);
+  const Q = new Queue<[number, number]>();
 
   Q.push([sy, sx]);
   maze[sy][sx] = 0;

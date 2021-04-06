@@ -1,5 +1,5 @@
 class Queue<T> {
-  constructor(private _data: T[]) {}
+  private _data: T[] = [];
 
   // @ts-ignore
   get data(): Readonly<T[]> {
@@ -17,12 +17,14 @@ class Queue<T> {
 
 // demo
 
-const queue = new Queue([0]);
+const queue = new Queue();
 
-for (let i = 1; i < 3; i++) {
+for (let i = 0; i < 3; i++) {
   queue.push(i);
 }
 
 console.log(queue.data);
 
 console.log(queue.pop());
+
+console.log(queue.data);
