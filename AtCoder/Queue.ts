@@ -11,7 +11,7 @@ class Queue<T> {
   }
 
   pop() {
-    return this._data.shift();
+    return this._data.shift()!;
   }
 }
 
