@@ -19,8 +19,8 @@ const main = (inputRows: string[]): void => {
   const [T1, T2, T3] = inputRows[0].split(" ").map(Number);
 
   const H = [...range(L + 1)].map(() => false);
-  x.forEach((v) => {
-    H[v] = true;
+  x.forEach((i) => {
+    H[i] = true;
   });
 
   const cost = [...range(L + 1)].map(() => 10 ** 100);
