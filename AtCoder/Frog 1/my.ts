@@ -1,51 +1,39 @@
-import * as fs from "fs";
-
-const input = fs.readFileSync("/dev/stdin", "utf8");
-// const input = `6
-// 30 10 60 10 60 50`;
-
-const splitInput = input.split("\n");
-
-const range = (
+function* range(
   ...args: [end: number] | [start: number, end: number, step?: number]
-): number[] => {
-  const arr: number[] = [];
+) {
+  // @ts-expect-error
+  const [start = 0, end, step = start < end ? 1 : -1]: [
+    number,
+    number,
+    number
+  ] = args.length === 1 ? [void 0, ...args] : args;
 
-  const [start = 0, end, step = 1] =
-    args.length === 1 ? [void 0, ...args] : args;
-
-  let i = start;
-  while (step > 0 ? i < end : i > end) {
-    arr.push(i);
-    i += step;
+  for (let i = start; step > 0 ? i < end : i > end; i += step) {
+    yield i;
   }
+}
 
-  return arr;
-};
+const main = (inputRows: string[]): void => {
+  const N = Number(inputRows.splice(0, 1)[0]);
+  const h = inputRows[0].split(" ").map(Number);
 
-const main = () => {
-  const N = Number(splitInput[0]);
+  const cost = [...range(N)].map(() => 0);
 
-  const hs = splitInput[1].split(" ").map(Number);
+  cost[0] = 0;
 
-  const cost = range(N).map(() => 0);
+  cost[1] = cost[0] + Math.abs(h[1] - h[0]);
 
-  range(N).forEach((n) => {
-    switch (n) {
-      case 0:
-        break;
-      case 1:
-        cost[n] = Math.abs(hs[n - 1] - hs[n]) + cost[n - 1];
-        break;
-      default:
-        cost[n] = Math.min(
-          Math.abs(hs[n - 1] - hs[n]) + cost[n - 1],
-          Math.abs(hs[n - 2] - hs[n]) + cost[n - 2]
-        );
-    }
-  });
+  for (const i of range(2, N)) {
+    cost[i] = Math.min(
+      cost[i - 1] + Math.abs(h[i] - h[i - 1]),
+      cost[i - 2] + Math.abs(h[i] - h[i - 2])
+    );
+  }
 
   console.log(cost[N - 1]);
 };
 
-export const ans = main();
+// const input = `6
+// 30 10 60 10 60 50`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
