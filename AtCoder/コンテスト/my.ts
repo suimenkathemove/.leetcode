@@ -1,29 +1,47 @@
-const main = (input: string) => {
-  const splitInput = input.split("\n");
+function* range(
+  ...args: [end: number] | [start: number, end: number, step?: number]
+) {
+  // @ts-expect-error
+  const [start = 0, end, step = start < end ? 1 : -1]: [
+    number,
+    number,
+    number
+  ] = args.length === 1 ? [void 0, ...args] : args;
 
-  const P = splitInput[1].split(" ").map(Number);
+  for (let i = start; step > 0 ? i < end : i > end; i += step) {
+    yield i;
+  }
+}
 
-  let value: number[] = [];
+const main = (inputRows: string[]): void => {
+  const N = Number(inputRows.splice(0, 1)[0]);
+  const ps = inputRows[0].split(" ").map(Number);
 
-  P.forEach((p) => {
-    value.push(p);
+  const pSum = ps.reduce((acc, cur) => acc + cur);
 
-    const arr: number[] = [];
+  const dp: boolean[][] = [...range(N)].map(() =>
+    [...range(pSum + 1)].map(() => false)
+  );
 
-    value.forEach((v, i) => {
-      if (i === value.length - 1) {
-        return;
+  dp[0][0] = true;
+  dp[0][ps[0]] = true;
+
+  for (const i of range(1, N)) {
+    for (const p of range(pSum + 1)) {
+      if (dp[i - 1][p]) {
+        dp[i][p] = true;
       }
 
-      arr.push(v + p);
-    });
+      if (p - ps[i] >= 0 && dp[i - 1][p - ps[i]]) {
+        dp[i][p] = true;
+      }
+    }
+  }
 
-    value = [...new Set([...value, ...arr])];
-  });
-
-  console.log(value.length + 1);
+  console.log(dp[N - 1].filter(Boolean).length);
 };
 
-// const mainReturn = main(`3
-// 2 3 5`);
-main(require("fs").readFileSync("/dev/stdin", "utf8"));
+// const input = `3
+// 2 3 5`;
+// export const mainReturn = main(input.split("\n"));
+main(require("fs").readFileSync("/dev/stdin", "utf8").split("\n"));
