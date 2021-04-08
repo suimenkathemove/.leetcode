@@ -2,8 +2,9 @@ const func = (i: number): string[] => {
   const arr: string[] = [];
 
   const func = (str: string) => {
-    if (str.length >= i) {
+    if (str.length === i) {
       arr.push(str);
+
       return;
     }
 
