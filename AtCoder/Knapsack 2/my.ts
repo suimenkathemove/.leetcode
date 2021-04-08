@@ -23,17 +23,17 @@ const main = (inputRows: string[]): void => {
     return { w, v };
   });
 
-  const vMax = items.reduce((acc, cur) => acc + cur.v, 0);
+  const vSum = items.reduce((acc, cur) => acc + cur.v, 0);
 
   const weight: number[][] = [...range(N)].map(() =>
-    [...range(vMax + 1)].map(() => 10 ** 100)
+    [...range(vSum + 1)].map(() => 10 ** 100)
   );
 
   weight[0][0] = 0;
   weight[0][items[0].v] = items[0].w;
 
   for (const i of range(1, N)) {
-    for (const v of range(vMax + 1)) {
+    for (const v of range(vSum + 1)) {
       weight[i][v] = Math.min(weight[i][v], weight[i - 1][v]);
 
       if (v - items[i].v >= 0) {
@@ -45,7 +45,7 @@ const main = (inputRows: string[]): void => {
     }
   }
 
-  for (const v of range(vMax, 0 - 1)) {
+  for (const v of range(vSum, 0 - 1)) {
     if (weight[N - 1][v] <= W) {
       console.log(v);
 
