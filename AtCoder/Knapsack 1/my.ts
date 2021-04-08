@@ -21,7 +21,7 @@ const main = (inputRows: string[]): void => {
     return { w, v };
   });
 
-  const value = [...range(N)].map(() =>
+  const value: number[][] = [...range(N)].map(() =>
     [...range(W + 1)].map(() => -(10 ** 100))
   );
 
